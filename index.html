@@ -25,7 +25,6 @@
             padding: 0 40px;
         }
 
-        /* Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -111,7 +110,6 @@
             background: #333;
         }
 
-        /* Hero Section */
         .hero {
             height: 100vh;
             display: flex;
@@ -171,7 +169,6 @@
             box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
         }
 
-        /* Sections */
         .section {
             padding: 5rem 0;
             background: white;
@@ -200,7 +197,6 @@
             border-radius: 2px;
         }
 
-        /* About Section */
         .about-content {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -232,7 +228,6 @@
             color: #666;
         }
 
-        /* Skills Section */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -271,7 +266,6 @@
             opacity: 0.9;
         }
 
-        /* Projects Section */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -364,7 +358,6 @@
             box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
         }
 
-        /* Contact Section */
         .contact-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -419,7 +412,6 @@
             box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
         }
 
-        /* Footer */
         footer {
             background: #333;
             color: white;
@@ -428,7 +420,6 @@
             margin-top: 2rem;
         }
 
-        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -473,7 +464,6 @@
             }
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -538,7 +528,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav id="navbar">
         <div class="container">
             <div class="nav-container">
@@ -559,7 +548,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
@@ -570,7 +558,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="section">
         <div class="container">
             <h2>About Me</h2>
@@ -587,7 +574,6 @@
         </div>
     </section>
 
-    <!-- Skills Section -->
     <section id="skills" class="section">
         <div class="container">
             <h2>Skills & Expertise</h2>
@@ -620,7 +606,6 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
     <section id="projects" class="section">
         <div class="container">
             <h2>Projects</h2>
@@ -656,8 +641,8 @@
                         <img src="images/socialfeed.png" alt="Project 3 Screenshot">
                     </div>
                     <div class="project-content">
-                        <h3>Social Feed</h3>
-                        <p>A lightweight social feed built with React, Recharts, and Tailwind CSS. Users can post, browse updates, and view simple activity stats in a clean, fast interface.</p>
+                        <h3>Responsive Landing Page</h3>
+                        <p>A modern, responsive landing page built with HTML and CSS, featuring smooth animations.</p>
                         <div class="project-links">
                             <a href="https://social-feed-project-mu.vercel.app/" target="_blank">View Project</a>
                         </div>
@@ -683,7 +668,6 @@
         
     </section>
 
-    <!-- Contact Section -->
     <section id="contact" class="section">
         <div class="container">
             <h2>Get In Touch</h2>
@@ -706,15 +690,13 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Keven Atef. All rights reserved. Made with Love and lots of creativity ✨</p>
+            <p>&copy; 2025 Keven Atef. All rights reserved. Built with lots of creativity ✨</p>
         </div>
     </footer>
 
     <script>
-        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -728,7 +710,6 @@
             });
         });
 
-        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 100) {
@@ -738,13 +719,11 @@
             }
         });
 
-        // Mobile menu toggle
         document.querySelector('.mobile-menu').addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
             navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
 
-        // Skills Animation on Scroll
         const skillsObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
@@ -761,7 +740,6 @@
             skillsObserver.observe(card);
         });
 
-        // Intersection Observer for sections animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -807,6 +785,4 @@
         });
     </script>
 </body>
-
 </html>
-
