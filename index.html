@@ -18,46 +18,19 @@
             --gradient:linear-gradient(135deg,var(--accent),var(--pink));
         }
         html{scroll-behavior:smooth;overflow-x:hidden}
-        body{
-            font-family:'Inter',sans-serif;background:var(--bg);
-            color:var(--text);overflow-x:hidden;
-            -webkit-font-smoothing:antialiased;
-            cursor:none;
-        }
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
         a,button,input,textarea,select{cursor:none}
 
-        .ak-cursor{
-            position:fixed;pointer-events:none;z-index:999999;
-            width:64px;height:64px;
-            transition:transform .08s ease;
-        }
-        .ak-cursor.clicking{transform:rotate(-15deg) scale(1.1)}
-        @media(max-width:768px){.ak-cursor{display:none}body,a,button,input,textarea,select{cursor:auto}}
+        .ak-cursor{position:fixed;pointer-events:none;z-index:999999;width:64px;height:64px;transform:scaleX(-1);transition:transform .06s ease}
+        .ak-cursor.clicking{transform:scaleX(-1) rotate(-15deg) scale(1.1)}
+        @media(max-width:768px){.ak-cursor,.muzzle-flash{display:none}body,a,button,input,textarea,select{cursor:auto}}
 
-        .muzzle-flash{
-            position:fixed;pointer-events:none;z-index:999998;
-            width:20px;height:20px;border-radius:50%;
-            background:radial-gradient(circle,#ffff00,#ff8800,transparent);
-            opacity:0;transform:scale(0);
-            transition:none;
-        }
-        .muzzle-flash.fire{
-            opacity:1;transform:scale(1);
-            animation:flash .15s ease-out forwards;
-        }
-        @keyframes flash{
-            0%{opacity:1;transform:scale(1)}
-            100%{opacity:0;transform:scale(2)}
-        }
+        .muzzle-flash{position:fixed;pointer-events:none;z-index:999998;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,#ffff00,#ff8800,transparent);opacity:0;transform:scale(0)}
+        .muzzle-flash.fire{opacity:1;transform:scale(1);animation:flash .12s ease-out forwards}
+        @keyframes flash{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(2)}}
 
-        .bullet-hole{
-            position:fixed;pointer-events:none;z-index:99;
-            width:8px;height:8px;border-radius:50%;
-            background:radial-gradient(circle,#222,#444);
-            box-shadow:0 0 3px rgba(0,0,0,.5),inset 0 0 2px #000;
-            animation:holeIn .2s ease;
-        }
-        @keyframes holeIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+        .bullet-hole{position:fixed;pointer-events:none;z-index:99;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#111,#333);box-shadow:0 0 2px rgba(0,0,0,.4),inset 0 0 1px #000;animation:holeLife .4s ease forwards}
+        @keyframes holeLife{0%{transform:scale(0);opacity:1}30%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}
 
         .scroll-prog{position:fixed;top:0;left:0;height:3px;background:var(--gradient);z-index:10001;width:0%;pointer-events:none}
 
@@ -248,7 +221,6 @@
             .about-grid{grid-template-columns:1fr;text-align:center}
             .about-highlights{justify-content:center}
             .proj-grid{grid-template-columns:1fr}
-            .stats-grid{grid-template-columns:repeat(3,1fr)}
             .contact-grid{grid-template-columns:1fr}
         }
         @media(max-width:768px){
@@ -286,7 +258,6 @@
     <circle cx="118" cy="26" r="2" fill="#888"/>
 </svg>
 <div class="muzzle-flash" id="muzzleFlash"></div>
-
 <div class="scroll-prog" id="scrollProg"></div>
 
 <nav class="nav" id="navbar">
@@ -341,23 +312,16 @@
         <div class="hero-visual-ring"><div class="hero-visual-dot hvd-1"></div></div>
         <div class="hero-visual-ring"><div class="hero-visual-dot hvd-2"></div></div>
         <div class="hero-visual-ring"><div class="hero-visual-dot hvd-3"></div></div>
-        <div class="hero-img-wrap">
-            <img src="images/keven.png" alt="Keven Atef">
-        </div>
+        <div class="hero-img-wrap"><img src="images/keven.png" alt="Keven Atef"></div>
     </div>
 </section>
 
 <section class="section about" id="about">
     <div class="section-inner">
-        <div class="sec-header reveal">
-            <span class="sec-tag">About Me</span>
-            <h2 class="sec-title">Passionate <span class="gradient">Developer</span></h2>
-        </div>
+        <div class="sec-header reveal"><span class="sec-tag">About Me</span><h2 class="sec-title">Passionate <span class="gradient">Developer</span></h2></div>
         <div class="about-grid">
             <div class="about-img-wrap reveal">
-                <div class="about-img-frame">
-                    <img src="images/keven.png" alt="Keven Atef">
-                </div>
+                <div class="about-img-frame"><img src="images/keven.png" alt="Keven Atef"></div>
                 <div class="about-float-badge afb-1">⚡ Full Stack Dev</div>
                 <div class="about-float-badge afb-2">🎯 16 Years Old</div>
             </div>
@@ -379,59 +343,14 @@
 
 <section class="section" id="skills">
     <div class="section-inner">
-        <div class="sec-header reveal">
-            <span class="sec-tag">My Expertise</span>
-            <h2 class="sec-title">Skills & <span class="gradient">Technologies</span></h2>
-        </div>
+        <div class="sec-header reveal"><span class="sec-tag">My Expertise</span><h2 class="sec-title">Skills & <span class="gradient">Technologies</span></h2></div>
         <div class="skills-grid">
-            <div class="skill-card reveal" data-tilt>
-                <div class="skill-card-glow"></div>
-                <div class="skill-particles"></div>
-                <div class="skill-icon si-1">⚛️</div>
-                <h3>Frontend Development</h3>
-                <p>Building responsive, interactive user interfaces with modern frameworks and pixel-perfect design.</p>
-                <div class="skill-tags"><span class="skill-tag">React</span><span class="skill-tag">JavaScript</span><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">Tailwind</span></div>
-            </div>
-            <div class="skill-card reveal reveal-delay-1" data-tilt>
-                <div class="skill-card-glow"></div>
-                <div class="skill-particles"></div>
-                <div class="skill-icon si-2">🖥️</div>
-                <h3>Backend Development</h3>
-                <p>Creating scalable server-side applications with robust APIs and authentication systems.</p>
-                <div class="skill-tags"><span class="skill-tag">Node.js</span><span class="skill-tag">Express</span><span class="skill-tag">REST APIs</span><span class="skill-tag">GraphQL</span></div>
-            </div>
-            <div class="skill-card reveal reveal-delay-2" data-tilt>
-                <div class="skill-card-glow"></div>
-                <div class="skill-particles"></div>
-                <div class="skill-icon si-3">🗄️</div>
-                <h3>Database & Storage</h3>
-                <p>Designing efficient database schemas and optimizing queries for peak performance.</p>
-                <div class="skill-tags"><span class="skill-tag">MongoDB</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">MySQL</span><span class="skill-tag">Redis</span></div>
-            </div>
-            <div class="skill-card reveal reveal-delay-3" data-tilt>
-                <div class="skill-card-glow"></div>
-                <div class="skill-particles"></div>
-                <div class="skill-icon si-4">🚀</div>
-                <h3>DevOps & Deployment</h3>
-                <p>Deploying and managing applications with modern CI/CD pipelines and containerization.</p>
-                <div class="skill-tags"><span class="skill-tag">Git</span><span class="skill-tag">Docker</span><span class="skill-tag">Vercel</span><span class="skill-tag">GitHub</span></div>
-            </div>
-            <div class="skill-card reveal reveal-delay-4" data-tilt>
-                <div class="skill-card-glow"></div>
-                <div class="skill-particles"></div>
-                <div class="skill-icon si-5">🔐</div>
-                <h3>API & Security</h3>
-                <p>Building secure, well-documented APIs with proper authentication and authorization.</p>
-                <div class="skill-tags"><span class="skill-tag">JWT</span><span class="skill-tag">OAuth</span><span class="skill-tag">HTTPS</span><span class="skill-tag">Middleware</span></div>
-            </div>
-            <div class="skill-card reveal reveal-delay-5" data-tilt>
-                <div class="skill-card-glow"></div>
-                <div class="skill-particles"></div>
-                <div class="skill-icon si-6">🧪</div>
-                <h3>Testing & QA</h3>
-                <p>Writing reliable tests and optimizing application performance for production.</p>
-                <div class="skill-tags"><span class="skill-tag">Jest</span><span class="skill-tag">Testing</span><span class="skill-tag">CI/CD</span><span class="skill-tag">Optimization</span></div>
-            </div>
+            <div class="skill-card reveal" data-tilt><div class="skill-card-glow"></div><div class="skill-particles"></div><div class="skill-icon si-1">⚛️</div><h3>Frontend Development</h3><p>Building responsive, interactive user interfaces with modern frameworks and pixel-perfect design.</p><div class="skill-tags"><span class="skill-tag">React</span><span class="skill-tag">JavaScript</span><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">Tailwind</span></div></div>
+            <div class="skill-card reveal reveal-delay-1" data-tilt><div class="skill-card-glow"></div><div class="skill-particles"></div><div class="skill-icon si-2">🖥️</div><h3>Backend Development</h3><p>Creating scalable server-side applications with robust APIs and authentication systems.</p><div class="skill-tags"><span class="skill-tag">Node.js</span><span class="skill-tag">Express</span><span class="skill-tag">REST APIs</span><span class="skill-tag">GraphQL</span></div></div>
+            <div class="skill-card reveal reveal-delay-2" data-tilt><div class="skill-card-glow"></div><div class="skill-particles"></div><div class="skill-icon si-3">🗄️</div><h3>Database & Storage</h3><p>Designing efficient database schemas and optimizing queries for peak performance.</p><div class="skill-tags"><span class="skill-tag">MongoDB</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">MySQL</span><span class="skill-tag">Redis</span></div></div>
+            <div class="skill-card reveal reveal-delay-3" data-tilt><div class="skill-card-glow"></div><div class="skill-particles"></div><div class="skill-icon si-4">🚀</div><h3>DevOps & Deployment</h3><p>Deploying and managing applications with modern CI/CD pipelines and containerization.</p><div class="skill-tags"><span class="skill-tag">Git</span><span class="skill-tag">Docker</span><span class="skill-tag">Vercel</span><span class="skill-tag">GitHub</span></div></div>
+            <div class="skill-card reveal reveal-delay-4" data-tilt><div class="skill-card-glow"></div><div class="skill-particles"></div><div class="skill-icon si-5">🔐</div><h3>API & Security</h3><p>Building secure, well-documented APIs with proper authentication and authorization.</p><div class="skill-tags"><span class="skill-tag">JWT</span><span class="skill-tag">OAuth</span><span class="skill-tag">HTTPS</span><span class="skill-tag">Middleware</span></div></div>
+            <div class="skill-card reveal reveal-delay-5" data-tilt><div class="skill-card-glow"></div><div class="skill-particles"></div><div class="skill-icon si-6">🧪</div><h3>Testing & QA</h3><p>Writing reliable tests and optimizing application performance for production.</p><div class="skill-tags"><span class="skill-tag">Jest</span><span class="skill-tag">Testing</span><span class="skill-tag">CI/CD</span><span class="skill-tag">Optimization</span></div></div>
         </div>
     </div>
 </section>
@@ -446,115 +365,38 @@
 
 <section class="section projects" id="projects">
     <div class="section-inner">
-        <div class="sec-header reveal">
-            <span class="sec-tag">My Work</span>
-            <h2 class="sec-title">Featured <span class="gradient">Projects</span></h2>
-        </div>
+        <div class="sec-header reveal"><span class="sec-tag">My Work</span><h2 class="sec-title">Featured <span class="gradient">Projects</span></h2></div>
         <div class="proj-grid">
-            <div class="proj-card reveal">
-                <div class="proj-img">
-                    <img src="images/customer.png" alt="Anoo Ezzat Portfolio">
-                    <div class="proj-img-overlay"></div>
-                </div>
-                <div class="proj-body">
-                    <div class="proj-cat">Client Work</div>
-                    <div class="proj-name">Anoo Ezzat | Portfolio</div>
-                    <p class="proj-desc">Personal portfolio website showcasing frontend skills. Built with smooth scroll animations, 3D avatar, responsive design, and modern dark theme.</p>
-                    <div class="proj-stack"><span class="proj-stack-tag">HTML</span><span class="proj-stack-tag">CSS</span><span class="proj-stack-tag">JavaScript</span></div>
-                    <a href="https://kevenateff.github.io/kevenateff/index.html" target="_blank" class="proj-link">View Live ↗</a>
-                </div>
-            </div>
-            <div class="proj-card reveal reveal-delay-1">
-                <div class="proj-img">
-                    <img src="images/e-commerce.png" alt="E-Commerce">
-                    <div class="proj-img-overlay"></div>
-                </div>
-                <div class="proj-body">
-                    <div class="proj-cat">Web App</div>
-                    <div class="proj-name">E-Commerce Landing</div>
-                    <p class="proj-desc">Modern, responsive E-Commerce landing page with smooth minimal animations. Clean product showcase with professional design.</p>
-                    <div class="proj-stack"><span class="proj-stack-tag">HTML</span><span class="proj-stack-tag">CSS</span><span class="proj-stack-tag">Responsive</span></div>
-                    <a href="https://techshop-ecommerce-eight.vercel.app/" target="_blank" class="proj-link">View Live ↗</a>
-                </div>
-            </div>
-            <div class="proj-card reveal reveal-delay-2">
-                <div class="proj-img">
-                    <img src="images/socialfeed.png" alt="Social Feed">
-                    <div class="proj-img-overlay"></div>
-                </div>
-                <div class="proj-body">
-                    <div class="proj-cat">UI Design</div>
-                    <div class="proj-name">Social Feed Landing</div>
-                    <p class="proj-desc">A modern, responsive landing page with smooth animations and clean layout. Built for social media product showcase.</p>
-                    <div class="proj-stack"><span class="proj-stack-tag">HTML</span><span class="proj-stack-tag">CSS</span><span class="proj-stack-tag">Animation</span></div>
-                    <a href="https://social-feed-project-mu.vercel.app/" target="_blank" class="proj-link">View Live ↗</a>
-                </div>
-            </div>
-            <div class="proj-card reveal reveal-delay-3">
-                <div class="proj-img">
-                    <img src="images/dashboard.png" alt="Admin Dashboard">
-                    <div class="proj-img-overlay"></div>
-                </div>
-                <div class="proj-body">
-                    <div class="proj-cat">Full Stack</div>
-                    <div class="proj-name">Admin Dashboard</div>
-                    <p class="proj-desc">Interactive admin dashboard with real-time analytics, sales charts, product tracking, and dark mode support.</p>
-                    <div class="proj-stack"><span class="proj-stack-tag">React</span><span class="proj-stack-tag">Recharts</span><span class="proj-stack-tag">Tailwind</span></div>
-                    <a href="https://dashboard-project-ivory-ten.vercel.app/" target="_blank" class="proj-link">View Live ↗</a>
-                </div>
-            </div>
+            <div class="proj-card reveal"><div class="proj-img"><img src="images/customer.png" alt="Anoo Ezzat Portfolio"><div class="proj-img-overlay"></div></div><div class="proj-body"><div class="proj-cat">Client Work</div><div class="proj-name">Anoo Ezzat | Portfolio</div><p class="proj-desc">Personal portfolio website showcasing frontend skills. Built with smooth scroll animations, 3D avatar, responsive design, and modern dark theme.</p><div class="proj-stack"><span class="proj-stack-tag">HTML</span><span class="proj-stack-tag">CSS</span><span class="proj-stack-tag">JavaScript</span></div><a href="https://kevenateff.github.io/kevenateff/index.html" target="_blank" class="proj-link">View Live ↗</a></div></div>
+            <div class="proj-card reveal reveal-delay-1"><div class="proj-img"><img src="images/e-commerce.png" alt="E-Commerce"><div class="proj-img-overlay"></div></div><div class="proj-body"><div class="proj-cat">Web App</div><div class="proj-name">E-Commerce Landing</div><p class="proj-desc">Modern, responsive E-Commerce landing page with smooth minimal animations. Clean product showcase with professional design.</p><div class="proj-stack"><span class="proj-stack-tag">HTML</span><span class="proj-stack-tag">CSS</span><span class="proj-stack-tag">Responsive</span></div><a href="https://techshop-ecommerce-eight.vercel.app/" target="_blank" class="proj-link">View Live ↗</a></div></div>
+            <div class="proj-card reveal reveal-delay-2"><div class="proj-img"><img src="images/socialfeed.png" alt="Social Feed"><div class="proj-img-overlay"></div></div><div class="proj-body"><div class="proj-cat">UI Design</div><div class="proj-name">Social Feed Landing</div><p class="proj-desc">A modern, responsive landing page with smooth animations and clean layout. Built for social media product showcase.</p><div class="proj-stack"><span class="proj-stack-tag">HTML</span><span class="proj-stack-tag">CSS</span><span class="proj-stack-tag">Animation</span></div><a href="https://social-feed-project-mu.vercel.app/" target="_blank" class="proj-link">View Live ↗</a></div></div>
+            <div class="proj-card reveal reveal-delay-3"><div class="proj-img"><img src="images/dashboard.png" alt="Admin Dashboard"><div class="proj-img-overlay"></div></div><div class="proj-body"><div class="proj-cat">Full Stack</div><div class="proj-name">Admin Dashboard</div><p class="proj-desc">Interactive admin dashboard with real-time analytics, sales charts, product tracking, and dark mode support.</p><div class="proj-stack"><span class="proj-stack-tag">React</span><span class="proj-stack-tag">Recharts</span><span class="proj-stack-tag">Tailwind</span></div><a href="https://dashboard-project-ivory-ten.vercel.app/" target="_blank" class="proj-link">View Live ↗</a></div></div>
         </div>
     </div>
 </section>
 
 <section class="section contact" id="contact">
     <div class="section-inner">
-        <div class="sec-header reveal">
-            <span class="sec-tag">Get In Touch</span>
-            <h2 class="sec-title">Let's <span class="gradient">Connect</span></h2>
-        </div>
+        <div class="sec-header reveal"><span class="sec-tag">Get In Touch</span><h2 class="sec-title">Let's <span class="gradient">Connect</span></h2></div>
         <div class="contact-grid">
             <div class="reveal">
-                <div class="contact-info">
-                    <h3>Let's Work Together</h3>
-                    <p>I'm always interested in new opportunities and exciting projects. Whether you have a question or want to collaborate, I'd love to hear from you.</p>
-                </div>
+                <div class="contact-info"><h3>Let's Work Together</h3><p>I'm always interested in new opportunities and exciting projects. Whether you have a question or want to collaborate, I'd love to hear from you.</p></div>
                 <div class="contact-cards">
-                    <div class="contact-card">
-                        <div class="cc-icon cc-icon-1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
-                        <div><div class="cc-label">Email</div><div class="cc-value">keven.atef27@gmail.com</div></div>
-                    </div>
-                    <div class="contact-card">
-                        <div class="cc-icon cc-icon-2"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-                        <div><div class="cc-label">Phone</div><div class="cc-value">+20 1277324047</div></div>
-                    </div>
-                    <div class="contact-card">
-                        <div class="cc-icon cc-icon-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
-                        <div><div class="cc-label">Location</div><div class="cc-value">Asyut, Egypt</div></div>
-                    </div>
+                    <div class="contact-card"><div class="cc-icon cc-icon-1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div><div><div class="cc-label">Email</div><div class="cc-value">keven.atef27@gmail.com</div></div></div>
+                    <div class="contact-card"><div class="cc-icon cc-icon-2"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="cc-label">Phone</div><div class="cc-value">+20 1277324047</div></div></div>
+                    <div class="contact-card"><div class="cc-icon cc-icon-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="cc-label">Location</div><div class="cc-value">Asyut, Egypt</div></div></div>
                 </div>
                 <div class="contact-socials">
-                    <a href="https://github.com/kevenateff" target="_blank" class="social-btn gh" title="GitHub">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    </a>
-                    <a href="mailto:keven.atef27@gmail.com" class="social-btn em" title="Email">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    </a>
+                    <a href="https://github.com/kevenateff" target="_blank" class="social-btn gh" title="GitHub"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="mailto:keven.atef27@gmail.com" class="social-btn em" title="Email"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
                 </div>
             </div>
             <div class="contact-form reveal reveal-delay-2">
                 <h3>Send a Message</h3>
                 <form action="https://formspree.io/f/xeorjnkz" method="POST" id="realForm">
-                    <div class="form-row">
-                        <div class="form-field"><label>Name</label><input type="text" name="name" placeholder="Your name" required></div>
-                        <div class="form-field"><label>Email</label><input type="email" name="email" placeholder="your@email.com" required></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-field full"><label>Subject</label><input type="text" name="subject" placeholder="What's this about?" required></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-field full"><label>Message</label><textarea name="message" rows="5" placeholder="Tell me about your project..." required></textarea></div>
-                    </div>
+                    <div class="form-row"><div class="form-field"><label>Name</label><input type="text" name="name" placeholder="Your name" required></div><div class="form-field"><label>Email</label><input type="email" name="email" placeholder="your@email.com" required></div></div>
+                    <div class="form-row"><div class="form-field full"><label>Subject</label><input type="text" name="subject" placeholder="What's this about?" required></div></div>
+                    <div class="form-row"><div class="form-field full"><label>Message</label><textarea name="message" rows="5" placeholder="Tell me about your project..." required></textarea></div></div>
                     <button type="submit" class="form-submit">Send Message →</button>
                 </form>
                 <div class="form-msg" id="formMsg">✓ Message sent! I'll get back to you soon.</div>
@@ -563,23 +405,15 @@
     </div>
 </section>
 
-<footer class="footer">
-    <div class="section-inner">
-        <p>© 2026 <a href="#">Keven Atef</a>. Built with passion & lots of ☕</p>
-    </div>
-</footer>
-
+<footer class="footer"><div class="section-inner"><p>© 2026 <a href="#">Keven Atef</a>. Built with passion & lots of ☕</p></div></footer>
 <button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-const akCursor=document.getElementById('akCursor');
-const muzzleFlash=document.getElementById('muzzleFlash');
-let akX=0,akY=0,targetX=0,targetY=0;
+var akCursor=document.getElementById('akCursor');
+var muzzleFlash=document.getElementById('muzzleFlash');
+var akX=0,akY=0,targetX=0,targetY=0;
 
-document.addEventListener('mousemove',e=>{
-    targetX=e.clientX;
-    targetY=e.clientY;
-});
+document.addEventListener('mousemove',function(e){targetX=e.clientX;targetY=e.clientY});
 
 function updateCursor(){
     akX+=(targetX-akX)*0.2;
@@ -590,44 +424,41 @@ function updateCursor(){
 }
 updateCursor();
 
-document.addEventListener('mousedown',e=>{
+document.addEventListener('mousedown',function(e){
     akCursor.classList.add('clicking');
-    muzzleFlash.style.left=(akX+55)+'px';
+    muzzleFlash.style.left=(akX-8)+'px';
     muzzleFlash.style.top=(akY-22)+'px';
     muzzleFlash.classList.remove('fire');
     void muzzleFlash.offsetWidth;
     muzzleFlash.classList.add('fire');
-
-    const hole=document.createElement('div');
+    var hole=document.createElement('div');
     hole.className='bullet-hole';
-    hole.style.left=e.clientX-4+'px';
-    hole.style.top=e.clientY-4+'px';
+    hole.style.left=e.clientX-3+'px';
+    hole.style.top=e.clientY-3+'px';
     document.body.appendChild(hole);
-    setTimeout(()=>hole.remove(),3000);
+    setTimeout(function(){hole.remove()},400);
 });
 
-document.addEventListener('mouseup',()=>{
-    akCursor.classList.remove('clicking');
-});
+document.addEventListener('mouseup',function(){akCursor.classList.remove('clicking')});
 
-const typingTexts=['Full Stack Developer','React & Node.js','Backend Engineer','UI/UX Enthusiast','Problem Solver'];
-let textIdx=0,charIdx=0,isDeleting=false;
-const typingEl=document.getElementById('typingText');
+var typingTexts=['Full Stack Developer','React & Node.js','Backend Engineer','UI/UX Enthusiast','Problem Solver'];
+var textIdx=0,charIdx=0,isDeleting=false;
+var typingEl=document.getElementById('typingText');
 function typeEffect(){
-    const current=typingTexts[textIdx];
+    var current=typingTexts[textIdx];
     typingEl.textContent=isDeleting?current.substring(0,charIdx-1):current.substring(0,charIdx+1);
     isDeleting?charIdx--:charIdx++;
-    let speed=isDeleting?40:80;
+    var speed=isDeleting?40:80;
     if(!isDeleting&&charIdx===current.length){speed=2000;isDeleting=true}
     else if(isDeleting&&charIdx===0){isDeleting=false;textIdx=(textIdx+1)%typingTexts.length;speed=400}
     setTimeout(typeEffect,speed);
 }
 setTimeout(typeEffect,1500);
 
-document.querySelectorAll('.skill-card[data-tilt]').forEach(card=>{
-    const particles=card.querySelector('.skill-particles');
-    for(let i=0;i<8;i++){
-        const p=document.createElement('div');
+document.querySelectorAll('.skill-card[data-tilt]').forEach(function(card){
+    var particles=card.querySelector('.skill-particles');
+    for(var i=0;i<8;i++){
+        var p=document.createElement('div');
         p.className='s-particle';
         p.style.left=Math.random()*100+'%';
         p.style.top=Math.random()*100+'%';
@@ -635,62 +466,58 @@ document.querySelectorAll('.skill-card[data-tilt]').forEach(card=>{
         p.style.height=p.style.width;
         particles.appendChild(p);
     }
-    card.addEventListener('mousemove',e=>{
-        const rect=card.getBoundingClientRect();
-        const x=e.clientX-rect.left;
-        const y=e.clientY-rect.top;
-        const centerX=rect.width/2;
-        const centerY=rect.height/2;
-        const mx=(x/rect.width)*100;
-        const my=(y/rect.height)*100;
-        card.style.setProperty('--rx',(y-centerY)/18+'deg');
-        card.style.setProperty('--ry',(centerX-x)/18+'deg');
+    card.addEventListener('mousemove',function(e){
+        var rect=card.getBoundingClientRect();
+        var x=e.clientX-rect.left,y=e.clientY-rect.top;
+        var cx=rect.width/2,cy=rect.height/2;
+        var mx=(x/rect.width)*100,my=(y/rect.height)*100;
+        card.style.setProperty('--rx',(y-cy)/18+'deg');
+        card.style.setProperty('--ry',(cx-x)/18+'deg');
         card.style.setProperty('--mx',mx+'%');
         card.style.setProperty('--my',my+'%');
-        particles.querySelectorAll('.s-particle').forEach(p=>{
-            p.style.transform=`translate(${(mx-parseFloat(p.style.left))*0.02}px,${(my-parseFloat(p.style.top))*0.02}px)`;
+        particles.querySelectorAll('.s-particle').forEach(function(p){
+            p.style.transform='translate('+(mx-parseFloat(p.style.left))*0.02+'px,'+(my-parseFloat(p.style.top))*0.02+'px)';
         });
     });
-    card.addEventListener('mouseleave',()=>{
+    card.addEventListener('mouseleave',function(){
         card.style.setProperty('--rx','0deg');
         card.style.setProperty('--ry','0deg');
         card.style.setProperty('--mx','50%');
         card.style.setProperty('--my','50%');
-        particles.querySelectorAll('.s-particle').forEach(p=>{p.style.transform='translate(0,0)'});
+        particles.querySelectorAll('.s-particle').forEach(function(p){p.style.transform='translate(0,0)'});
     });
 });
 
-window.addEventListener('scroll',()=>{
-    const s=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
+window.addEventListener('scroll',function(){
+    var s=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
     document.getElementById('scrollProg').style.width=(h>0?(s/h*100):0)+'%';
     document.getElementById('navbar').classList.toggle('scrolled',s>50);
     document.getElementById('btt').classList.toggle('vis',s>400);
 },{passive:true});
 
-const burger=document.getElementById('burger'),mobNav=document.getElementById('mobNav');
-burger.addEventListener('click',()=>{burger.classList.toggle('active');mobNav.classList.toggle('active')});
+var burger=document.getElementById('burger'),mobNav=document.getElementById('mobNav');
+burger.addEventListener('click',function(){burger.classList.toggle('active');mobNav.classList.toggle('active')});
 function closeNav(){burger.classList.remove('active');mobNav.classList.remove('active')}
 
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener('click',function(e){
         e.preventDefault();
-        const t=document.querySelector(this.getAttribute('href'));
+        var t=document.querySelector(this.getAttribute('href'));
         if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
     });
 });
 
-const revealObs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+var revealObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis')});
 },{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+document.querySelectorAll('.reveal').forEach(function(el){revealObs.observe(el)});
 
-const counterObs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
+var counterObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
         if(e.isIntersecting){
-            const el=e.target,target=parseInt(el.dataset.target);
-            let current=0;
-            const step=Math.max(1,Math.floor(target/50));
-            const timer=setInterval(()=>{
+            var el=e.target,target=parseInt(el.dataset.target),current=0;
+            var step=Math.max(1,Math.floor(target/50));
+            var timer=setInterval(function(){
                 current+=step;
                 if(current>=target){current=target;clearInterval(timer)}
                 el.textContent=current;
@@ -699,21 +526,17 @@ const counterObs=new IntersectionObserver(entries=>{
         }
     });
 },{threshold:.5});
-document.querySelectorAll('.counter').forEach(c=>counterObs.observe(c));
+document.querySelectorAll('.counter').forEach(function(c){counterObs.observe(c)});
 
 document.getElementById('realForm').addEventListener('submit',function(e){
     e.preventDefault();
-    const form=this;
-    fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}}).then(r=>{
-        if(r.ok){
-            document.getElementById('formMsg').classList.add('show');
-            form.reset();
-            setTimeout(()=>document.getElementById('formMsg').classList.remove('show'),5000);
-        }
-    }).catch(()=>{});
+    var form=this;
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}}).then(function(r){
+        if(r.ok){document.getElementById('formMsg').classList.add('show');form.reset();setTimeout(function(){document.getElementById('formMsg').classList.remove('show')},5000)}
+    }).catch(function(){});
 });
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeNav()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNav()});
 </script>
 </body>
 </html>
