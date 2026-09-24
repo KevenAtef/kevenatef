@@ -191,13 +191,7 @@
             justify-content: space-between;
             padding: 1.4rem 0;
         }
-        .rail-logo {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: var(--ink);
-            text-decoration: none;
-        }
-        .rail-logo span { color: var(--accent); }
+        .rail-logo { display: none; }
         .rail-dots {
             display: flex;
             flex-direction: column;
@@ -451,8 +445,8 @@
         .hero-photo {
             position: relative;
             z-index: 2;
-            width: min(62%, 400px);
-            margin: clamp(-104px, -7vw, -44px) auto clamp(2rem, 3.5vw, 3rem);
+            width: min(54%, 400px);
+            margin: clamp(-56px, -4vw, -28px) auto clamp(2rem, 3.5vw, 3rem);
         }
         .photo-frame {
             border: 2.5px solid var(--ink);
@@ -849,15 +843,12 @@
             display: block;
             width: 100%;
             height: auto;
-            aspect-ratio: 4 / 3;
-            object-fit: cover;
             border: 2.5px solid var(--ink);
             box-shadow: 6px 6px 0 var(--ink);
-            filter: grayscale(1) contrast(1.05);
-            transition: filter .35s ease, transform .35s ease, box-shadow .35s ease;
+            background: var(--paper);
+            transition: transform .35s ease, box-shadow .35s ease, opacity .6s ease;
         }
         .proj-row:hover .proj-thumb img {
-            filter: grayscale(0);
             transform: translate(-3px, -3px);
             box-shadow: 9px 9px 0 var(--accent);
         }
@@ -1076,16 +1067,89 @@
             .btt { bottom: 1.1rem; right: 1.1rem; }
         }
 
-        /* ============ REDUCED MOTION ============ */
-        @media (prefers-reduced-motion: reduce) {
-            html { scroll-behavior: auto; }
-            .reveal { opacity: 1; transform: none; transition: none; }
-            .marquee-track, .orbit-badge svg, .hero-star, .status-dot { animation: none; }
-            * { transition-duration: .01ms !important; }
+        /* ============ PAGE LOADER ============ */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--ink);
+            z-index: 200000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform .65s cubic-bezier(.76, 0, .24, 1);
+        }
+        .loader.done { transform: translateY(-100%); }
+        .loader-inner { text-align: center; width: min(320px, 70vw); }
+        .loader-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--paper);
+            margin-bottom: 1.5rem;
+        }
+        .loader-logo span { color: var(--accent); }
+        .loader-bar {
+            height: 4px;
+            background: rgba(244, 239, 230, .15);
+            overflow: hidden;
+        }
+        .loader-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+        }
+        .loader-pct {
+            margin-top: .9rem;
+            font-size: .74rem;
+            letter-spacing: .22em;
+            color: rgba(244, 239, 230, .7);
+        }
+
+        /* ============ IMAGE FADE-IN ON LOAD ============ */
+        .hero-photo img,
+        .proj-thumb img {
+            opacity: 0;
+            transition: opacity .6s ease, transform .35s ease, box-shadow .35s ease;
+        }
+        .hero-photo img.loaded,
+        .proj-thumb img.loaded { opacity: 1; }
+
+        /* ============ HERO ENTRANCE (after loader) ============ */
+        body.ready .hero-top { animation: heroDown .7s cubic-bezier(.16, 1, .3, 1) both; }
+        body.ready .hero-name { animation: heroUp .8s cubic-bezier(.16, 1, .3, 1) .12s both; }
+        body.ready .hero-photo { animation: heroPhoto .9s cubic-bezier(.16, 1, .3, 1) .3s both; }
+        body.ready .hero-bottom { animation: heroUp .8s cubic-bezier(.16, 1, .3, 1) .48s both; }
+        @keyframes heroDown {
+            from { opacity: 0; transform: translateY(-26px); }
+            to { opacity: 1; transform: none; }
+        }
+        @keyframes heroUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: none; }
+        }
+        @keyframes heroPhoto {
+            from { opacity: 0; transform: translateY(44px) scale(.94); }
+            to { opacity: 1; transform: none; }
         }
     </style>
 </head>
 <body>
+
+    <noscript>
+        <style>
+            .loader { display: none; }
+            .hero-photo img, .proj-thumb img { opacity: 1; }
+        </style>
+    </noscript>
+
+    <!-- Page loader -->
+    <div class="loader" id="loader">
+        <div class="loader-inner">
+            <div class="loader-logo">KA<span>.</span></div>
+            <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+            <div class="loader-pct" id="loaderPct">0%</div>
+        </div>
+    </div>
 
     <a class="skip-link" href="#home">Skip to content</a>
 
@@ -1150,7 +1214,7 @@
 
             <h1 class="hero-name">Keven Atef<span class="hero-star">*</span></h1>
 
-            <div class="hero-photo reveal">
+            <div class="hero-photo">
                 <div class="photo-frame">
                     <img src="images/keven.png" alt="Keven Atef — Full Stack Web Developer" width="874" height="968" fetchpriority="high" decoding="async">
                 </div>
@@ -1544,6 +1608,49 @@
     <button class="btt" id="btt" aria-label="Back to top">↑</button>
 
     <script>
+        // ============ PAGE LOADER ============
+        var loader = document.getElementById('loader');
+        var loaderFill = document.getElementById('loaderFill');
+        var loaderPct = document.getElementById('loaderPct');
+        var pageLoaded = false;
+        var progress = 0;
+        document.body.classList.add('nav-locked');
+
+        window.addEventListener('load', function() { pageLoaded = true; });
+
+        var loadTick = setInterval(function() {
+            progress += pageLoaded ? 14 : (Math.random() * 5 + 2);
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(loadTick);
+                finishLoader();
+            }
+            loaderFill.style.width = progress + '%';
+            loaderPct.textContent = Math.round(progress) + '%';
+        }, 80);
+
+        function finishLoader() {
+            setTimeout(function() {
+                loader.classList.add('done');
+                document.body.classList.add('ready');
+                document.body.classList.remove('nav-locked');
+                setTimeout(function() { loader.style.display = 'none'; }, 750);
+            }, 300);
+        }
+
+        // ============ IMAGE FADE-IN ON LOAD ============
+        (function() {
+            var imgs = document.querySelectorAll('.hero-photo img, .proj-thumb img');
+            imgs.forEach(function(img) {
+                if (img.complete && img.naturalWidth > 0) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', function() { img.classList.add('loaded'); });
+                    img.addEventListener('error', function() { img.classList.add('loaded'); });
+                }
+            });
+        })();
+
         // ============ CUSTOM CURSOR (desktop only) ============
         var cursorDot = document.getElementById('cursorDot');
         var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
