@@ -21,9 +21,9 @@
     <meta property="og:url" content="https://kevenatef.github.io/kevenatef/">
     <meta property="og:title" content="Keven Atef — Full Stack Developer">
     <meta property="og:description" content="16-year-old Full Stack Web Developer from Egypt building complete web applications from frontend to backend with modern technologies.">
-    <meta property="og:image" content="https://kevenatef.github.io/kevenatef/images/keven.png">
-    <meta property="og:image:width" content="874">
-    <meta property="og:image:height" content="968">
+    <meta property="og:image" content="https://kevenatef.github.io/kevenatef/images/keven.jpg">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="886">
     <meta property="og:image:alt" content="Keven Atef — Full Stack Developer">
     <meta property="og:locale" content="en_US">
     <meta property="og:site_name" content="Keven Atef Portfolio">
@@ -32,7 +32,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Keven Atef — Full Stack Developer">
     <meta name="twitter:description" content="16-year-old Full Stack Web Developer from Egypt building complete web applications from frontend to backend with modern technologies.">
-    <meta name="twitter:image" content="https://kevenatef.github.io/kevenatef/images/keven.png">
+    <meta name="twitter:image" content="https://kevenatef.github.io/kevenatef/images/keven.jpg">
 
     <meta name="theme-color" content="#f4efe6">
 
@@ -56,7 +56,7 @@
           "jobTitle": "Full Stack Web Developer",
           "description": "16-year-old Full Stack Web Developer from Asyut, Egypt, building complete web applications from frontend to backend with modern technologies.",
           "url": "https://kevenatef.github.io/kevenatef/",
-          "image": "https://kevenatef.github.io/kevenatef/images/keven.png",
+          "image": "https://kevenatef.github.io/kevenatef/images/keven.jpg",
           "email": "mailto:keven.atef27@gmail.com",
           "telephone": "+20 1277324047",
           "address": {
@@ -1213,14 +1213,14 @@
         <div class="container hero-grid">
             <div class="hero-top mono">
                 <span class="hero-status"><span class="status-dot"></span>Available for freelance & projects</span>
-                <span class="hero-coords">27.1783° N, 31.1859° E — EG</span>
+                <span class="hero-coords" id="localTime">ASYUT, EG</span>
             </div>
 
             <h1 class="hero-name">Keven Atef<span class="hero-star">*</span></h1>
 
             <div class="hero-photo">
                 <div class="photo-frame">
-                    <img src="images/keven.png" alt="Keven Atef — Full Stack Web Developer" width="874" height="968" fetchpriority="high" decoding="async">
+                    <img src="images/keven.jpg" alt="Keven Atef — Full Stack Web Developer" width="800" height="886" fetchpriority="high" decoding="async">
                 </div>
                 <div class="orbit-badge" aria-hidden="true">
                     <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -1443,7 +1443,7 @@
                         <a href="https://kevenateff.github.io/kevenateff/index.html" target="_blank" rel="noopener noreferrer" class="proj-link mono">View Live ↗</a>
                     </div>
                     <div class="proj-thumb">
-                        <img src="images/customer.png" alt="Anoo Ezzat Portfolio website screenshot" width="1350" height="2306" loading="lazy" decoding="async">
+                        <img src="images/customer.jpg" alt="Anoo Ezzat Portfolio website screenshot" width="800" height="1367" loading="lazy" decoding="async">
                     </div>
                 </article>
 
@@ -1464,7 +1464,7 @@
                         <a href="https://techshop-ecommerce-eight.vercel.app/" target="_blank" rel="noopener noreferrer" class="proj-link mono">View Live ↗</a>
                     </div>
                     <div class="proj-thumb">
-                        <img src="images/e-commerce.png" alt="E-Commerce landing page screenshot" width="1350" height="5264" loading="lazy" decoding="async">
+                        <img src="images/e-commerce.jpg" alt="E-Commerce landing page screenshot" width="800" height="3119" loading="lazy" decoding="async">
                     </div>
                 </article>
 
@@ -1485,7 +1485,7 @@
                         <a href="https://social-feed-project-mu.vercel.app/" target="_blank" rel="noopener noreferrer" class="proj-link mono">View Live ↗</a>
                     </div>
                     <div class="proj-thumb">
-                        <img src="images/socialfeed.png" alt="Social Feed landing page screenshot" width="1350" height="2049" loading="lazy" decoding="async">
+                        <img src="images/socialfeed.jpg" alt="Social Feed landing page screenshot" width="800" height="1214" loading="lazy" decoding="async">
                     </div>
                 </article>
 
@@ -1506,7 +1506,7 @@
                         <a href="https://dashboard-project-ivory-ten.vercel.app/" target="_blank" rel="noopener noreferrer" class="proj-link mono">View Live ↗</a>
                     </div>
                     <div class="proj-thumb">
-                        <img src="images/dashboard.png" alt="Admin dashboard with analytics charts screenshot" width="1350" height="1332" loading="lazy" decoding="async">
+                        <img src="images/dashboard.jpg" alt="Admin dashboard with analytics charts screenshot" width="800" height="789" loading="lazy" decoding="async">
                     </div>
                 </article>
             </div>
@@ -1794,6 +1794,23 @@
         document.querySelectorAll('.counter').forEach(function(c) {
             counterObs.observe(c);
         });
+
+        // ============ LOCAL TIME (Asyut, Egypt) ============
+        (function() {
+            var el = document.getElementById('localTime');
+            if (!el) return;
+            function updateClock() {
+                var time;
+                try {
+                    time = new Date().toLocaleTimeString('en-GB', { timeZone: 'Africa/Cairo', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                } catch (err) {
+                    time = new Date().toLocaleTimeString('en-GB');
+                }
+                el.textContent = 'ASYUT, EG — ' + time;
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+        })();
 
         // ============ CONTACT FORM (AJAX via Formspree) ============
         document.getElementById('realForm').addEventListener('submit', function(e) {
