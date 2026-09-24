@@ -8,6 +8,7 @@
     <meta name="keywords" content="Keven Atef, Full Stack Developer, Web Developer Egypt, React Developer, Node.js Developer, Backend Developer, Portfolio, Asyut, Frontend Developer, JavaScript Developer">
     <meta name="author" content="Keven Atef">
     <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="7aa6d067c57f9a8d">
     <link rel="canonical" href="https://kevenatef.github.io/kevenatef/">
 
     <!-- Geo / Local SEO -->
@@ -2181,9 +2182,6 @@
     <button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
     <script>
-        // =============================================
-        // CUSTOM CURSOR - follows mouse with lerp
-        // =============================================
         var akCursor = document.getElementById('akCursor');
         var muzzleFlash = document.getElementById('muzzleFlash');
         var akX = 0, akY = 0, targetX = 0, targetY = 0;
@@ -2193,7 +2191,6 @@
             targetY = e.clientY;
         });
 
-        // Smooth cursor follow with linear interpolation
         function updateCursor() {
             akX += (targetX - akX) * 0.2;
             akY += (targetY - akY) * 0.2;
@@ -2203,37 +2200,25 @@
         }
         updateCursor();
 
-        // Shoot effect on mouse click
         document.addEventListener('mousedown', function(e) {
-            // Recoil animation
             akCursor.classList.add('clicking');
-
-            // Show muzzle flash at barrel tip
             muzzleFlash.style.left = (akX - 8) + 'px';
             muzzleFlash.style.top = (akY - 22) + 'px';
             muzzleFlash.classList.remove('fire');
             void muzzleFlash.offsetWidth;
             muzzleFlash.classList.add('fire');
-
-            // Create bullet hole at click position
             var hole = document.createElement('div');
             hole.className = 'bullet-hole';
             hole.style.left = e.clientX - 3 + 'px';
             hole.style.top = e.clientY - 3 + 'px';
             document.body.appendChild(hole);
-
-            // Remove bullet hole after animation
             setTimeout(function() { hole.remove(); }, 400);
         });
 
-        // Remove recoil on mouse release
         document.addEventListener('mouseup', function() {
             akCursor.classList.remove('clicking');
         });
 
-        // =============================================
-        // TYPING EFFECT - cycles through roles
-        // =============================================
         var typingTexts = [
             'Full Stack Developer',
             'React & Node.js',
@@ -2246,7 +2231,6 @@
 
         function typeEffect() {
             var current = typingTexts[textIdx];
-
             if (isDeleting) {
                 typingEl.textContent = current.substring(0, charIdx - 1);
                 charIdx--;
@@ -2254,34 +2238,21 @@
                 typingEl.textContent = current.substring(0, charIdx + 1);
                 charIdx++;
             }
-
             var speed = isDeleting ? 40 : 80;
-
-            // Pause at end of word before deleting
             if (!isDeleting && charIdx === current.length) {
                 speed = 2000;
                 isDeleting = true;
-            }
-            // Move to next word after deleting
-            else if (isDeleting && charIdx === 0) {
+            } else if (isDeleting && charIdx === 0) {
                 isDeleting = false;
                 textIdx = (textIdx + 1) % typingTexts.length;
                 speed = 400;
             }
-
             setTimeout(typeEffect, speed);
         }
-
-        // Start typing after page loads
         setTimeout(typeEffect, 1500);
 
-        // =============================================
-        // SKILL CARDS - 3D tilt and particle effects
-        // =============================================
         document.querySelectorAll('.skill-card[data-tilt]').forEach(function(card) {
             var particles = card.querySelector('.skill-particles');
-
-            // Generate random particles inside each card
             for (var i = 0; i < 8; i++) {
                 var p = document.createElement('div');
                 p.className = 's-particle';
@@ -2291,8 +2262,6 @@
                 p.style.height = p.style.width;
                 particles.appendChild(p);
             }
-
-            // 3D tilt and glow follow mouse
             card.addEventListener('mousemove', function(e) {
                 var rect = card.getBoundingClientRect();
                 var x = e.clientX - rect.left;
@@ -2301,57 +2270,37 @@
                 var centerY = rect.height / 2;
                 var mx = (x / rect.width) * 100;
                 var my = (y / rect.height) * 100;
-
-                // Set CSS variables for tilt and glow position
                 card.style.setProperty('--rx', (y - centerY) / 18 + 'deg');
                 card.style.setProperty('--ry', (centerX - x) / 18 + 'deg');
                 card.style.setProperty('--mx', mx + '%');
                 card.style.setProperty('--my', my + '%');
-
-                // Move particles slightly toward cursor
                 particles.querySelectorAll('.s-particle').forEach(function(p) {
                     var px = parseFloat(p.style.left);
                     var py = parseFloat(p.style.top);
                     p.style.transform = 'translate(' + (mx - px) * 0.02 + 'px,' + (my - py) * 0.02 + 'px)';
                 });
             });
-
-            // Reset tilt and particles on mouse leave
             card.addEventListener('mouseleave', function() {
                 card.style.setProperty('--rx', '0deg');
                 card.style.setProperty('--ry', '0deg');
                 card.style.setProperty('--mx', '50%');
                 card.style.setProperty('--my', '50%');
-
                 particles.querySelectorAll('.s-particle').forEach(function(p) {
                     p.style.transform = 'translate(0,0)';
                 });
             });
         });
 
-        // =============================================
-        // SCROLL EVENTS - progress bar, nav, back to top
-        // =============================================
         window.addEventListener('scroll', function() {
             var s = window.scrollY;
             var h = document.documentElement.scrollHeight - window.innerHeight;
-
-            // Update scroll progress bar width
             document.getElementById('scrollProg').style.width = (h > 0 ? (s / h * 100) : 0) + '%';
-
-            // Toggle navbar blur background
             document.getElementById('navbar').classList.toggle('scrolled', s > 50);
-
-            // Show/hide back to top button
             document.getElementById('btt').classList.toggle('vis', s > 400);
         }, { passive: true });
 
-        // =============================================
-        // MOBILE NAVIGATION
-        // =============================================
         var burger = document.getElementById('burger');
         var mobNav = document.getElementById('mobNav');
-
         burger.addEventListener('click', function() {
             burger.classList.toggle('active');
             mobNav.classList.toggle('active');
@@ -2362,9 +2311,6 @@
             mobNav.classList.remove('active');
         }
 
-        // =============================================
-        // SMOOTH SCROLLING - for anchor links
-        // =============================================
         document.querySelectorAll('a[href^="#"]').forEach(function(a) {
             a.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -2375,9 +2321,6 @@
             });
         });
 
-        // =============================================
-        // SCROLL REVEAL - fade in elements on scroll
-        // =============================================
         var revealObs = new IntersectionObserver(function(entries) {
             entries.forEach(function(e) {
                 if (e.isIntersecting) {
@@ -2390,9 +2333,6 @@
             revealObs.observe(el);
         });
 
-        // =============================================
-        // COUNTER ANIMATION - count up numbers
-        // =============================================
         var counterObs = new IntersectionObserver(function(entries) {
             entries.forEach(function(e) {
                 if (e.isIntersecting) {
@@ -2400,7 +2340,6 @@
                     var target = parseInt(el.dataset.target);
                     var current = 0;
                     var step = Math.max(1, Math.floor(target / 50));
-
                     var timer = setInterval(function() {
                         current += step;
                         if (current >= target) {
@@ -2409,8 +2348,6 @@
                         }
                         el.textContent = current;
                     }, 30);
-
-                    // Only animate once
                     counterObs.unobserve(el);
                 }
             });
@@ -2420,24 +2357,17 @@
             counterObs.observe(c);
         });
 
-        // =============================================
-        // CONTACT FORM - AJAX submit via Formspree
-        // =============================================
         document.getElementById('realForm').addEventListener('submit', function(e) {
             e.preventDefault();
             var form = this;
-
             fetch(form.action, {
                 method: 'POST',
                 body: new FormData(form),
                 headers: { 'Accept': 'application/json' }
             }).then(function(r) {
                 if (r.ok) {
-                    // Show success message and reset form
                     document.getElementById('formMsg').classList.add('show');
                     form.reset();
-
-                    // Hide success message after 5 seconds
                     setTimeout(function() {
                         document.getElementById('formMsg').classList.remove('show');
                     }, 5000);
@@ -2445,11 +2375,7 @@
             }).catch(function() {});
         });
 
-        // =============================================
-        // KEYBOARD SHORTCUTS
-        // =============================================
         document.addEventListener('keydown', function(e) {
-            // Close mobile nav with Escape key
             if (e.key === 'Escape') closeNav();
         });
     </script>
