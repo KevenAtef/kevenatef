@@ -36,9 +36,9 @@
 
     <meta name="theme-color" content="#f4efe6">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="apple-touch-icon" href="favicon.svg">
+    <!-- Favicon (Keven's photo) -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -445,8 +445,8 @@
         .hero-photo {
             position: relative;
             z-index: 2;
-            width: min(54%, 400px);
-            margin: clamp(-56px, -4vw, -28px) auto clamp(2rem, 3.5vw, 3rem);
+            width: min(48%, 380px);
+            margin: clamp(1.25rem, 2.5vw, 2rem) auto clamp(2rem, 3.5vw, 3rem);
         }
         .photo-frame {
             border: 2.5px solid var(--ink);
@@ -842,7 +842,9 @@
         .proj-thumb img {
             display: block;
             width: 100%;
-            height: auto;
+            height: clamp(360px, 30vw, 440px);
+            object-fit: cover;
+            object-position: top center;
             border: 2.5px solid var(--ink);
             box-shadow: 6px 6px 0 var(--ink);
             background: var(--paper);
@@ -1071,7 +1073,7 @@
         .loader {
             position: fixed;
             inset: 0;
-            background: var(--ink);
+            background: var(--paper);
             z-index: 200000;
             display: flex;
             align-items: center;
@@ -1079,18 +1081,18 @@
             transition: transform .65s cubic-bezier(.76, 0, .24, 1);
         }
         .loader.done { transform: translateY(-100%); }
-        .loader-inner { text-align: center; width: min(320px, 70vw); }
-        .loader-logo {
-            font-family: 'Space Mono', monospace;
-            font-size: 2.6rem;
-            font-weight: 700;
-            color: var(--paper);
+        .loader-inner { text-align: center; width: min(340px, 70vw); }
+        .loader-num {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(4rem, 10vw, 6.5rem);
+            line-height: 1;
+            color: var(--ink);
             margin-bottom: 1.5rem;
         }
-        .loader-logo span { color: var(--accent); }
+        .loader-num span { color: var(--accent); font-size: .5em; }
         .loader-bar {
-            height: 4px;
-            background: rgba(244, 239, 230, .15);
+            height: 3px;
+            background: rgba(23, 19, 13, .12);
             overflow: hidden;
         }
         .loader-fill {
@@ -1098,11 +1100,13 @@
             width: 0%;
             background: var(--accent);
         }
-        .loader-pct {
-            margin-top: .9rem;
-            font-size: .74rem;
-            letter-spacing: .22em;
-            color: rgba(244, 239, 230, .7);
+        .loader-label {
+            margin-top: 1.1rem;
+            font-size: .7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .26em;
+            color: var(--ink2);
         }
 
         /* ============ IMAGE FADE-IN ON LOAD ============ */
@@ -1145,9 +1149,9 @@
     <!-- Page loader -->
     <div class="loader" id="loader">
         <div class="loader-inner">
-            <div class="loader-logo">KA<span>.</span></div>
+            <div class="loader-num" id="loaderNum">0<span>%</span></div>
             <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
-            <div class="loader-pct" id="loaderPct">0%</div>
+            <div class="loader-label mono">Loading portfolio</div>
         </div>
     </div>
 
@@ -1611,7 +1615,7 @@
         // ============ PAGE LOADER ============
         var loader = document.getElementById('loader');
         var loaderFill = document.getElementById('loaderFill');
-        var loaderPct = document.getElementById('loaderPct');
+        var loaderNum = document.getElementById('loaderNum');
         var pageLoaded = false;
         var progress = 0;
         document.body.classList.add('nav-locked');
@@ -1626,7 +1630,7 @@
                 finishLoader();
             }
             loaderFill.style.width = progress + '%';
-            loaderPct.textContent = Math.round(progress) + '%';
+            loaderNum.innerHTML = Math.round(progress) + '<span>%</span>';
         }, 80);
 
         function finishLoader() {
