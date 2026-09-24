@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kevenatef.github.io/kevenatef/sitemap.xml
