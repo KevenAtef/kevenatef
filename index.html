@@ -391,94 +391,11 @@
             align-items: center;
             padding: clamp(7rem, 12vh, 9rem) 0 clamp(3.5rem, 6vh, 5.5rem);
         }
-        .hero-deco {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-            will-change: transform;
+        .hero-grid {
+            position: relative;
+            z-index: 1;
+            width: 100%;
         }
-        .deco { position: absolute; }
-        .d-circle {
-            top: 10%;
-            right: 6%;
-            width: 220px;
-            height: 220px;
-            border: 2px solid var(--ink);
-            border-radius: 50%;
-            opacity: .12;
-            animation: float1 14s ease-in-out infinite;
-        }
-        .d-ring {
-            bottom: 16%;
-            left: 5%;
-            width: 140px;
-            height: 140px;
-            border: 2.5px solid var(--accent);
-            border-radius: 50%;
-            opacity: .28;
-            animation: float2 11s ease-in-out infinite;
-        }
-        .d-square {
-            top: 20%;
-            left: 10%;
-            width: 64px;
-            height: 64px;
-            border: 2px solid var(--accent);
-            opacity: .3;
-            animation: float3 13s ease-in-out infinite;
-        }
-        .d-asterisk {
-            top: 58%;
-            right: 12%;
-            font-family: 'Archivo Black', sans-serif;
-            font-size: 3.4rem;
-            color: var(--accent);
-            opacity: .45;
-            animation: spinSlow 18s linear infinite;
-        }
-        .d-cross {
-            top: 76%;
-            left: 18%;
-            font-family: 'Space Mono', monospace;
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: var(--ink);
-            opacity: .22;
-            animation: float2 12s ease-in-out infinite reverse;
-        }
-        .d-dot-1 {
-            top: 28%;
-            right: 28%;
-            width: 14px;
-            height: 14px;
-            background: var(--ink);
-            opacity: .28;
-            animation: float1 10s ease-in-out infinite;
-        }
-        .d-dot-2 {
-            bottom: 28%;
-            right: 22%;
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            opacity: .5;
-            animation: float3 9s ease-in-out infinite;
-        }
-        @keyframes float1 {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-18px); }
-        }
-        @keyframes float2 {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(14px) rotate(8deg); }
-        }
-        @keyframes float3 {
-            0%, 100% { transform: rotate(45deg) translateY(0); }
-            50% { transform: rotate(45deg) translateY(-12px); }
-        }
-        @keyframes spinSlow { to { transform: rotate(360deg); } }
         .hero-grid {
             position: relative;
             z-index: 1;
@@ -1303,16 +1220,6 @@
 
     <!-- Hero -->
     <header class="hero" id="home">
-        <div class="hero-deco" aria-hidden="true">
-            <div class="deco d-circle"></div>
-            <div class="deco d-ring"></div>
-            <div class="deco d-square"></div>
-            <div class="deco d-asterisk">*</div>
-            <div class="deco d-cross">+</div>
-            <div class="deco d-dot-1"></div>
-            <div class="deco d-dot-2"></div>
-        </div>
-
         <div class="container hero-grid">
             <div class="hero-top mono">
                 <span class="hero-status"><span class="status-dot"></span>Available for freelance & projects</span>
@@ -1920,32 +1827,6 @@
             }
             updateClock();
             setInterval(updateClock, 1000);
-        })();
-
-        // ============ HERO PARALLAX (lightweight, GPU transforms only) ============
-        (function() {
-            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-            var deco = document.querySelector('.hero-deco');
-            if (!deco) return;
-
-            var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
-
-            document.addEventListener('mousemove', function(e) {
-                tx = (e.clientX / window.innerWidth - 0.5);
-                ty = (e.clientY / window.innerHeight - 0.5);
-                if (!raf) loop();
-            });
-
-            function loop() {
-                cx += (tx - cx) * 0.06;
-                cy += (ty - cy) * 0.06;
-                if (Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001) {
-                    raf = null;
-                    return;
-                }
-                raf = requestAnimationFrame(loop);
-                deco.style.transform = 'translate(' + (cx * -22) + 'px, ' + (cy * -16) + 'px)';
-            }
         })();
 
         // ============ CONTACT FORM (AJAX via Formspree) ============
