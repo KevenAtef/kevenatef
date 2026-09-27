@@ -385,12 +385,25 @@
 
         /* ============ HERO ============ */
         .hero {
+            position: relative;
             min-height: 100svh;
             display: flex;
             align-items: center;
             padding: clamp(7rem, 12vh, 9rem) 0 clamp(3.5rem, 6vh, 5.5rem);
         }
-        .hero-grid { width: 100%; }
+        #hero3d {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .hero-grid {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
         .hero-top {
             display: flex;
             justify-content: space-between;
@@ -1210,6 +1223,8 @@
 
     <!-- Hero -->
     <header class="hero" id="home">
+        <canvas id="hero3d" aria-hidden="true"></canvas>
+
         <div class="container hero-grid">
             <div class="hero-top mono">
                 <span class="hero-status"><span class="status-dot"></span>Available for freelance & projects</span>
@@ -1611,6 +1626,9 @@
     <!-- Back to top -->
     <button class="btt" id="btt" aria-label="Back to top">↑</button>
 
+    <!-- Three.js for the hero 3D background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script>
         // ============ PAGE LOADER ============
         var loader = document.getElementById('loader');
@@ -1810,6 +1828,119 @@
             }
             updateClock();
             setInterval(updateClock, 1000);
+        })();
+
+        // ============ THREE.JS HERO BACKGROUND ============
+        (function() {
+            var canvas = document.getElementById('hero3d');
+            if (!canvas || typeof THREE === 'undefined') return;
+
+            var renderer;
+            try {
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            } catch (err) {
+                return;
+            }
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+            camera.position.z = 14;
+
+            var ACCENT = 0xe8501e;
+            var INK = 0x17130d;
+            var isMobile = window.innerWidth < 900;
+
+            // Floating geometric shapes
+            var geos = [
+                new THREE.IcosahedronGeometry(1, 0),
+                new THREE.OctahedronGeometry(1, 0),
+                new THREE.TorusGeometry(0.7, 0.28, 10, 24),
+                new THREE.BoxGeometry(1.1, 1.1, 1.1)
+            ];
+            var shapes = [];
+            var count = isMobile ? 8 : 16;
+
+            for (var i = 0; i < count; i++) {
+                var wire = Math.random() > 0.55;
+                var mat = wire
+                    ? new THREE.MeshBasicMaterial({
+                        color: Math.random() > 0.5 ? ACCENT : INK,
+                        wireframe: true, transparent: true, opacity: 0.45
+                    })
+                    : new THREE.MeshBasicMaterial({ color: ACCENT, transparent: true, opacity: 0.85 });
+                var mesh = new THREE.Mesh(geos[i % geos.length], mat);
+                mesh.position.set(
+                    (Math.random() - 0.5) * 22,
+                    (Math.random() - 0.5) * 14,
+                    (Math.random() - 0.5) * 8
+                );
+                mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+                mesh.userData.rotSpeed = 0.002 + Math.random() * 0.006;
+                mesh.userData.floatSpeed = 0.3 + Math.random() * 0.7;
+                mesh.userData.floatOffset = Math.random() * Math.PI * 2;
+                mesh.userData.baseY = mesh.position.y;
+                scene.add(mesh);
+                shapes.push(mesh);
+            }
+
+            // Particle dots
+            var pCount = isMobile ? 60 : 160;
+            var pGeo = new THREE.BufferGeometry();
+            var positions = new Float32Array(pCount * 3);
+            for (var p = 0; p < pCount; p++) {
+                positions[p * 3] = (Math.random() - 0.5) * 26;
+                positions[p * 3 + 1] = (Math.random() - 0.5) * 16;
+                positions[p * 3 + 2] = (Math.random() - 0.5) * 10;
+            }
+            pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            var points = new THREE.Points(pGeo, new THREE.PointsMaterial({
+                color: INK, size: 0.06, transparent: true, opacity: 0.4
+            }));
+            scene.add(points);
+
+            // Mouse parallax
+            var mx = 0, my = 0;
+            document.addEventListener('mousemove', function(e) {
+                mx = (e.clientX / window.innerWidth - 0.5) * 2;
+                my = (e.clientY / window.innerHeight - 0.5) * 2;
+            });
+
+            function resize() {
+                var w = canvas.clientWidth, h = canvas.clientHeight;
+                if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
+                    renderer.setSize(w, h, false);
+                    camera.aspect = w / h;
+                    camera.updateProjectionMatrix();
+                }
+            }
+
+            // Pause rendering when hero is off-screen (loop stays alive, resumes automatically)
+            var heroVisible = true;
+            new IntersectionObserver(function(entries) {
+                heroVisible = entries[0].isIntersecting;
+            }, { threshold: 0.02 }).observe(document.getElementById('home'));
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if (!heroVisible) return;
+                resize();
+                var t = Date.now() * 0.001;
+
+                for (var i = 0; i < shapes.length; i++) {
+                    var s = shapes[i];
+                    s.rotation.x += s.userData.rotSpeed;
+                    s.rotation.y += s.userData.rotSpeed * 1.4;
+                    s.position.y = s.userData.baseY + Math.sin(t * s.userData.floatSpeed + s.userData.floatOffset) * 0.5;
+                }
+                points.rotation.y = t * 0.02;
+
+                camera.position.x += (mx * 1.6 - camera.position.x) * 0.04;
+                camera.position.y += (-my * 1.0 - camera.position.y) * 0.04;
+                camera.lookAt(0, 0, 0);
+                renderer.render(scene, camera);
+            }
+            animate();
         })();
 
         // ============ CONTACT FORM (AJAX via Formspree) ============
