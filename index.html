@@ -391,14 +391,94 @@
             align-items: center;
             padding: clamp(7rem, 12vh, 9rem) 0 clamp(3.5rem, 6vh, 5.5rem);
         }
-        #hero3d {
+        .hero-deco {
             position: absolute;
             inset: 0;
-            width: 100%;
-            height: 100%;
             z-index: 0;
             pointer-events: none;
+            overflow: hidden;
+            will-change: transform;
         }
+        .deco { position: absolute; }
+        .d-circle {
+            top: 10%;
+            right: 6%;
+            width: 220px;
+            height: 220px;
+            border: 2px solid var(--ink);
+            border-radius: 50%;
+            opacity: .12;
+            animation: float1 14s ease-in-out infinite;
+        }
+        .d-ring {
+            bottom: 16%;
+            left: 5%;
+            width: 140px;
+            height: 140px;
+            border: 2.5px solid var(--accent);
+            border-radius: 50%;
+            opacity: .28;
+            animation: float2 11s ease-in-out infinite;
+        }
+        .d-square {
+            top: 20%;
+            left: 10%;
+            width: 64px;
+            height: 64px;
+            border: 2px solid var(--accent);
+            opacity: .3;
+            animation: float3 13s ease-in-out infinite;
+        }
+        .d-asterisk {
+            top: 58%;
+            right: 12%;
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 3.4rem;
+            color: var(--accent);
+            opacity: .45;
+            animation: spinSlow 18s linear infinite;
+        }
+        .d-cross {
+            top: 76%;
+            left: 18%;
+            font-family: 'Space Mono', monospace;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--ink);
+            opacity: .22;
+            animation: float2 12s ease-in-out infinite reverse;
+        }
+        .d-dot-1 {
+            top: 28%;
+            right: 28%;
+            width: 14px;
+            height: 14px;
+            background: var(--ink);
+            opacity: .28;
+            animation: float1 10s ease-in-out infinite;
+        }
+        .d-dot-2 {
+            bottom: 28%;
+            right: 22%;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            opacity: .5;
+            animation: float3 9s ease-in-out infinite;
+        }
+        @keyframes float1 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-18px); }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(14px) rotate(8deg); }
+        }
+        @keyframes float3 {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(45deg) translateY(-12px); }
+        }
+        @keyframes spinSlow { to { transform: rotate(360deg); } }
         .hero-grid {
             position: relative;
             z-index: 1;
@@ -1223,7 +1303,15 @@
 
     <!-- Hero -->
     <header class="hero" id="home">
-        <canvas id="hero3d" aria-hidden="true"></canvas>
+        <div class="hero-deco" aria-hidden="true">
+            <div class="deco d-circle"></div>
+            <div class="deco d-ring"></div>
+            <div class="deco d-square"></div>
+            <div class="deco d-asterisk">*</div>
+            <div class="deco d-cross">+</div>
+            <div class="deco d-dot-1"></div>
+            <div class="deco d-dot-2"></div>
+        </div>
 
         <div class="container hero-grid">
             <div class="hero-top mono">
@@ -1626,8 +1714,7 @@
     <!-- Back to top -->
     <button class="btt" id="btt" aria-label="Back to top">↑</button>
 
-    <!-- Three.js for the hero 3D background -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js removed: replaced with lightweight CSS decoration layer -->
 
     <script>
         // ============ PAGE LOADER ============
@@ -1678,7 +1765,7 @@
         var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
         if (finePointer && cursorDot) {
-            var cx = 0, cy = 0, tx = 0, ty = 0, visible = false;
+            var cx = 0, cy = 0, tx = 0, ty = 0, visible = false, cursorRaf = null;
 
             document.addEventListener('mousemove', function(e) {
                 tx = e.clientX;
@@ -1687,6 +1774,7 @@
                     visible = true;
                     cursorDot.style.opacity = '1';
                 }
+                if (!cursorRaf) loop();
             });
 
             document.addEventListener('mouseover', function(e) {
@@ -1701,13 +1789,17 @@
                 }
             });
 
-            (function loop() {
+            function loop() {
                 cx += (tx - cx) * 0.22;
                 cy += (ty - cy) * 0.22;
                 cursorDot.style.left = (cx - 6) + 'px';
                 cursorDot.style.top = (cy - 6) + 'px';
-                requestAnimationFrame(loop);
-            })();
+                if (Math.abs(tx - cx) < 0.5 && Math.abs(ty - cy) < 0.5) {
+                    cursorRaf = null;
+                    return;
+                }
+                cursorRaf = requestAnimationFrame(loop);
+            }
         } else if (cursorDot) {
             cursorDot.style.display = 'none';
         }
@@ -1830,118 +1922,33 @@
             setInterval(updateClock, 1000);
         })();
 
-        // ============ THREE.JS HERO BACKGROUND ============
+        // ============ HERO PARALLAX (lightweight, GPU transforms only) ============
         (function() {
-            var canvas = document.getElementById('hero3d');
-            if (!canvas || typeof THREE === 'undefined') return;
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+            var deco = document.querySelector('.hero-deco');
+            if (!deco) return;
 
-            var renderer;
-            try {
-                renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            } catch (err) {
-                return;
-            }
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
 
-            var scene = new THREE.Scene();
-            var camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-            camera.position.z = 14;
-
-            var ACCENT = 0xe8501e;
-            var INK = 0x17130d;
-            var isMobile = window.innerWidth < 900;
-
-            // Floating geometric shapes
-            var geos = [
-                new THREE.IcosahedronGeometry(1, 0),
-                new THREE.OctahedronGeometry(1, 0),
-                new THREE.TorusGeometry(0.7, 0.28, 10, 24),
-                new THREE.BoxGeometry(1.1, 1.1, 1.1)
-            ];
-            var shapes = [];
-            var count = isMobile ? 8 : 16;
-
-            for (var i = 0; i < count; i++) {
-                var wire = Math.random() > 0.55;
-                var mat = wire
-                    ? new THREE.MeshBasicMaterial({
-                        color: Math.random() > 0.5 ? ACCENT : INK,
-                        wireframe: true, transparent: true, opacity: 0.45
-                    })
-                    : new THREE.MeshBasicMaterial({ color: ACCENT, transparent: true, opacity: 0.85 });
-                var mesh = new THREE.Mesh(geos[i % geos.length], mat);
-                mesh.position.set(
-                    (Math.random() - 0.5) * 22,
-                    (Math.random() - 0.5) * 14,
-                    (Math.random() - 0.5) * 8
-                );
-                mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-                mesh.userData.rotSpeed = 0.002 + Math.random() * 0.006;
-                mesh.userData.floatSpeed = 0.3 + Math.random() * 0.7;
-                mesh.userData.floatOffset = Math.random() * Math.PI * 2;
-                mesh.userData.baseY = mesh.position.y;
-                scene.add(mesh);
-                shapes.push(mesh);
-            }
-
-            // Particle dots
-            var pCount = isMobile ? 60 : 160;
-            var pGeo = new THREE.BufferGeometry();
-            var positions = new Float32Array(pCount * 3);
-            for (var p = 0; p < pCount; p++) {
-                positions[p * 3] = (Math.random() - 0.5) * 26;
-                positions[p * 3 + 1] = (Math.random() - 0.5) * 16;
-                positions[p * 3 + 2] = (Math.random() - 0.5) * 10;
-            }
-            pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            var points = new THREE.Points(pGeo, new THREE.PointsMaterial({
-                color: INK, size: 0.06, transparent: true, opacity: 0.4
-            }));
-            scene.add(points);
-
-            // Mouse parallax
-            var mx = 0, my = 0;
             document.addEventListener('mousemove', function(e) {
-                mx = (e.clientX / window.innerWidth - 0.5) * 2;
-                my = (e.clientY / window.innerHeight - 0.5) * 2;
+                tx = (e.clientX / window.innerWidth - 0.5);
+                ty = (e.clientY / window.innerHeight - 0.5);
+                if (!raf) loop();
             });
 
-            function resize() {
-                var w = canvas.clientWidth, h = canvas.clientHeight;
-                if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
-                    renderer.setSize(w, h, false);
-                    camera.aspect = w / h;
-                    camera.updateProjectionMatrix();
+            function loop() {
+                cx += (tx - cx) * 0.06;
+                cy += (ty - cy) * 0.06;
+                if (Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001) {
+                    raf = null;
+                    return;
                 }
+                raf = requestAnimationFrame(loop);
+                deco.style.transform = 'translate(' + (cx * -22) + 'px, ' + (cy * -16) + 'px)';
             }
-
-            // Pause rendering when hero is off-screen (loop stays alive, resumes automatically)
-            var heroVisible = true;
-            new IntersectionObserver(function(entries) {
-                heroVisible = entries[0].isIntersecting;
-            }, { threshold: 0.02 }).observe(document.getElementById('home'));
-
-            function animate() {
-                requestAnimationFrame(animate);
-                if (!heroVisible) return;
-                resize();
-                var t = Date.now() * 0.001;
-
-                for (var i = 0; i < shapes.length; i++) {
-                    var s = shapes[i];
-                    s.rotation.x += s.userData.rotSpeed;
-                    s.rotation.y += s.userData.rotSpeed * 1.4;
-                    s.position.y = s.userData.baseY + Math.sin(t * s.userData.floatSpeed + s.userData.floatOffset) * 0.5;
-                }
-                points.rotation.y = t * 0.02;
-
-                camera.position.x += (mx * 1.6 - camera.position.x) * 0.04;
-                camera.position.y += (-my * 1.0 - camera.position.y) * 0.04;
-                camera.lookAt(0, 0, 0);
-                renderer.render(scene, camera);
-            }
-            animate();
         })();
+
+        // ============ CONTACT FORM (AJAX via Formspree) ============
 
         // ============ CONTACT FORM (AJAX via Formspree) ============
         document.getElementById('realForm').addEventListener('submit', function(e) {
